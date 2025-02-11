@@ -9,34 +9,65 @@
 </head>
 <body>
 
-<div style="width: 70%; align-content: center; " class="container">
-    <h5 th:text = "${applicationRequest.isHandled()} == 0 ?  'Обработанная заявка' : '*** Новая необработанная заявка ***'"
-        th:style = "${applicationRequest.isHandled()} == 0 ? 'color: green' : 'color: red'"
-    ></h5>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CRM Система</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/">Все заявки</a>
+                <a class="nav-link" href="/new">Новые заявки</a>
+                <a class="nav-link" href="/old">Обработанные заявки</a>
+                <a class="nav-link" href="/add">+Добавить заявку</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="text-align: center;" >
+    <h5 th:text = "${applicationRequest.isHandled()}  ?  'Обработанная заявка' : '*** Новая необработанная заявка ***'"
+        th:style = "${applicationRequest.isHandled()}  ? 'color: green; align-content: center;' : 'color: red; align-content: center;'"></h5>
 </div>
 
 <div class="container" style="width: 70%; align-content: center">
 
-    <form class="form-container" method="post" >
+    <input type='hidden' name='id' th:value="${applicationRequest.getId()}" />
+
+    <form class="form-container" method="post" th:action="@{/detail/{id}(id=${applicationRequest.getId()})}" >
 
         <label>ФИО:</label>
         <input class="form-control" type="text" name="name" th:value="${applicationRequest.getUserName()}">
 
         <label>Курс:</label>
-        <select name="course" >
-            <option></option>
-            <option></option>
-            <option></option>
+        <select name="course" class="form-control">
+            <option value="Java Developer"
+                    th:selected="${applicationRequest.getCourseName() eq 'Java Developer'}">
+                Java Developer
+            </option>
+            <option value="Golang Developer"
+                    th:selected="${applicationRequest.getCourseName() eq 'Golang Developer'}">
+                Golang Developer
+            </option>
+            <option value="FullStack Developer"
+                    th:selected="${applicationRequest.getCourseName() eq 'FullStack Developer'}">
+                FullStack Developer
+            </option>
         </select>
+
         <br>
 
         <label>Телефон:</label>
         <input class="form-control" type="text" name="phone" th:value="${applicationRequest.getPhone()}">
 
         <label>Комментарии:</label>
-        <textarea class="form-control" rows="5" name="commentary" th:value="${applicationRequest.getCommentary()}"></textarea>
+        <textarea class="form-control" rows="5" name="commentary"
+                  th:text="${applicationRequest.getCommentary()}"></textarea>
 
-        <button type="submit" class="btn btn-success" name="action" value="obrabotka">Обработать заявку</button>
+        <br>
+        <button type="submit" class="btn btn-success" name="action" value="obrabotka"
+                th:if="${!applicationRequest.isHandled()}">Обработать заявку</button>
         <button type="submit" class="btn btn-danger" name="action" value="delete" >Удалить заявку</button>
 
     </form>

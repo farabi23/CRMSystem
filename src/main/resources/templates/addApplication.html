@@ -9,6 +9,23 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CRM Система</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/">Все заявки</a>
+                <a class="nav-link" href="/new">Новые заявки</a>
+                <a class="nav-link" href="/old">Обработанные заявки</a>
+                <a class="nav-link" href="/add">+Добавить заявку</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
 
 
 <div class="container" style="width: 70%; align-content: center">
@@ -19,19 +36,18 @@
     <input class="form-control" type="text" name="name" placeholder="ФИО:">
 
     <label>Курс:</label>
-    <select name="course">
+    <select name="course" class="form-control">
         <option>Java Developer</option>
         <option>Golang Developer</option>
         <option>FullStack Developer</option>
     </select>
-    <br>
 
     <label>Телефон:</label>
-    <input class="form-control" type="text" name="phone">
+    <input class="form-control" type="text" name="phone" placeholder="+7(7__)_______">
 
     <label>Комментарии:</label>
     <textarea class="form-control" rows="5" name="commentary" ></textarea>
-
+<br>
     <button type="submit" class="btn btn-success">Добавить заявку</button>
 
 </form>
