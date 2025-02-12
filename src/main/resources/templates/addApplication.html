@@ -36,10 +36,8 @@
     <input class="form-control" type="text" name="name" placeholder="ФИО:">
 
     <label>Курс:</label>
-    <select name="course" class="form-control">
-        <option>Java Developer</option>
-        <option>Golang Developer</option>
-        <option>FullStack Developer</option>
+    <select  name="course" class="form-control">
+        <option th:each = "course : ${coursesList}" th:value = "${course.getId()}" th:text = "${course.getName()}"></option>
     </select>
 
     <label>Телефон:</label>

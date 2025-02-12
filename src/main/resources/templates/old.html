@@ -19,7 +19,7 @@
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/">Все заявки</a>
         <a class="nav-link" href="/new">Новые заявки</a>
-        <a class="nav-link" href="#">Обработанные заявки</a>
+        <a class="nav-link" href="/old">Обработанные заявки</a>
         <a class="nav-link" href="/add">+Добавить заявку</a>
       </div>
     </div>
@@ -42,7 +42,8 @@
       </p>
       <p >
         Курс:
-        <strong th:text = "${app.getCourseName()}"  ></strong>
+        <strong th:if="${app.getCourse() != null}" th:text="${app.getCourse().getName()}"></strong>
+        <strong th:if="${app.getCourse() == null}">[Курс не указан]</strong>
       </p>
       <p th:text = "${app.getCommentary()}"></p>
 

@@ -15,8 +15,6 @@ public class ApplicationRequest {
     @Column(name="userName", length = 250)
     private String userName;
 
-    @Column(name = "courseName", length = 250)
-    private String courseName;
 
     @Column(name = "commentary", length = 250)
     private String commentary;
@@ -27,16 +25,29 @@ public class ApplicationRequest {
     @Column(name = "handled", length = 50)
     private boolean handled;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
+    private Courses course;
+
     public ApplicationRequest() {
 
     }
 
-    public ApplicationRequest(String userName, String courseName, String commentary, String phone, boolean handled) {
+    public Courses getCourse() {
+        return course;
+    }
+
+    public void setCourse(Courses course) {
+        this.course = course;
+    }
+
+    public ApplicationRequest(String userName, String commentary, String phone, boolean handled, Courses course) {
         this.userName = userName;
-        this.courseName = courseName;
+
         this.commentary = commentary;
         this.phone = phone;
         this.handled = handled;
+        this.course = course;
 
     }
 
@@ -56,13 +67,6 @@ public class ApplicationRequest {
         this.userName = userName;
     }
 
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
 
     public String getCommentary() {
         return commentary;

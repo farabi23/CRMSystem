@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Controller
@@ -17,33 +19,54 @@ public class Controller {
     @Autowired
     ApplicationRepository applicationRepository;
 
+    @Autowired
+    CoursesRepository coursesRepository;
+
     @GetMapping("/")
     public String index(Model model) {
 
 
-      List<ApplicationRequest> applicationRequestList = applicationRepository.findAll();
+      List<ApplicationRequest> applicationRequestList = applicationRepository.findAllWithCourses();
 
-      model.addAttribute("applicationRequestList", applicationRequestList);
+      List<Courses> coursesList = coursesRepository.findAll();
+
+      List<ApplicationRequest> sortedApplications = applicationRequestList.stream()
+                      .sorted(Comparator.comparing(ApplicationRequest::isHandled))
+              .collect(Collectors.toList());
+
+      model.addAttribute("applicationRequestList", sortedApplications);
+      model.addAttribute("coursesList", coursesList);
 
         return "homepage";
     }
 
     @GetMapping("/add")
-    public String home() {
+    public String home(Model model) {
+
+        List<Courses> coursesList = coursesRepository.findAll();
+
+        model.addAttribute("coursesList", coursesList);
+
         return "addApplication";
+
     }
 
     @PostMapping("/add")
-    public String addApplication(@RequestParam("name") String name, @RequestParam("course") String course,
+    public String addApplication(@RequestParam("name") String name, @RequestParam("course") Long courseId,
                                  @RequestParam("phone") String phone,
                                  @RequestParam("commentary") String commentary) {
 
         ApplicationRequest applicationRequest = new ApplicationRequest();
+
         applicationRequest.setUserName(name);
-        applicationRequest.setCourseName(course);
+
         applicationRequest.setPhone(phone);
         applicationRequest.setCommentary(commentary);
         applicationRequest.setHandled(false);
+
+        Courses course = coursesRepository.findById(courseId).orElse(null);
+
+        applicationRequest.setCourse(course);
 
         applicationRepository.save(applicationRequest);
 

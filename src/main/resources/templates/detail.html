@@ -43,15 +43,15 @@
         <label>Курс:</label>
         <select name="course" class="form-control">
             <option value="Java Developer"
-                    th:selected="${applicationRequest.getCourseName() eq 'Java Developer'}">
+                    th:selected="${applicationRequest.getCourse().getName() eq 'Java Developer'}">
                 Java Developer
             </option>
             <option value="Golang Developer"
-                    th:selected="${applicationRequest.getCourseName() eq 'Golang Developer'}">
+                    th:selected="${applicationRequest.getCourse().getName() eq 'Golang Developer'}">
                 Golang Developer
             </option>
             <option value="FullStack Developer"
-                    th:selected="${applicationRequest.getCourseName() eq 'FullStack Developer'}">
+                    th:selected="${applicationRequest.getCourse().getName() eq 'FullStack Developer'}">
                 FullStack Developer
             </option>
         </select>
