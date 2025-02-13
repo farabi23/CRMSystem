@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,6 +22,9 @@ public class Controller {
 
     @Autowired
     CoursesRepository coursesRepository;
+
+    @Autowired
+    OperatorRepository operatorRepository;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -82,6 +86,11 @@ public class Controller {
 
         model.addAttribute("applicationRequest", applicationRequest);
 
+        List<Operator> operatorList = operatorRepository.findAll();
+
+        model.addAttribute("operatorList", operatorList);
+
+
         return "detail";
     }
 
@@ -131,5 +140,42 @@ public class Controller {
 
         return "old";
     }
+
+    @PostMapping("/operator")
+    public String operator(@RequestParam("selectedOperators") List<Long> selectedIds,
+                           RedirectAttributes redirectAttributes, @RequestParam("requestId") Long requestId) {
+
+        ApplicationRequest applicationRequest = applicationRepository.findById(requestId).orElse(null);
+        applicationRequest.setHandled(true);
+
+        List<Operator> operatorListByIds = operatorRepository.findAllById(selectedIds);
+
+        applicationRequest.setOperator(operatorListByIds);
+
+        applicationRepository.save(applicationRequest);
+
+        redirectAttributes.addFlashAttribute("selectedOpList", operatorListByIds);
+
+        return "redirect:/detail/" + requestId;
+    }
+
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable Long id,
+                         @RequestParam("requestId") Long requestId) {
+
+        Operator operator =  operatorRepository.findById(id).orElse(null);
+
+        ApplicationRequest applicationRequest = applicationRepository.findById(requestId).orElse(null);
+
+        applicationRequest.getOperator().remove(operator);
+
+        applicationRepository.save(applicationRequest);
+
+        return "redirect:/detail/" + requestId;
+
+    }
+
+
 
 }

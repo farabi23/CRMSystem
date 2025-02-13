@@ -3,6 +3,8 @@ package com.CRMSystem.CRMSystem;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="ApplicationRequest")
 public class ApplicationRequest {
@@ -29,6 +31,10 @@ public class ApplicationRequest {
     @JoinColumn(name = "course_id")
     private Courses course;
 
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Operator> operator;
+
     public ApplicationRequest() {
 
     }
@@ -41,13 +47,14 @@ public class ApplicationRequest {
         this.course = course;
     }
 
-    public ApplicationRequest(String userName, String commentary, String phone, boolean handled, Courses course) {
+    public ApplicationRequest(String userName, String commentary, String phone, boolean handled, Courses course, List<Operator> operator) {
         this.userName = userName;
 
         this.commentary = commentary;
         this.phone = phone;
         this.handled = handled;
         this.course = course;
+        this.operator = operator;
 
     }
 
@@ -90,5 +97,13 @@ public class ApplicationRequest {
 
     public void setHandled(boolean handled) {
         this.handled = handled;
+    }
+
+    public List<Operator> getOperator() {
+        return operator;
+    }
+
+    public void setOperator(List<Operator> operator) {
+        this.operator = operator;
     }
 }
